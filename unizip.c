@@ -6,7 +6,7 @@
 /*   By: lufelip2 <lufelip2@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/09 21:32:26 by lufelip2          #+#    #+#             */
-/*   Updated: 2023/01/10 22:07:02 by lufelip2         ###   ########.fr       */
+/*   Updated: 2023/01/12 22:24:07 by lufelip2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,14 +17,14 @@ int	main(void)
 	t_leaf	**symbols;
 	t_leaf	*tree;
 	int		fd;
-	int		i;
+	//int		i;
 
-	i = 0;
+	//i = 0;
 	fd = open("test.txt", O_RDONLY);
 	symbols = get_symbols(fd);
 	tree = get_hufftree(symbols);
-	printf("%d\n", tree->weight);
-	printf("Left %s\n", tree->right->left->right->symbol);
+	printf("Node %s\n", tree->symbol);
+	printf("Left %s\n", tree->left->symbol);
 	printf("Right %s\n", tree->right->symbol);
 	//while(symbols[i])
 	//{

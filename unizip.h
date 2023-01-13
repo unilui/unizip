@@ -6,7 +6,7 @@
 /*   By: lufelip2 <lufelip2@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/10 19:56:38 by lufelip2          #+#    #+#             */
-/*   Updated: 2023/01/10 22:02:58 by lufelip2         ###   ########.fr       */
+/*   Updated: 2023/01/12 22:11:12 by lufelip2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ typedef	struct s_leaf {
 // Utils
 int		table_size(t_leaf **table);
 void	free_table(t_leaf **table);
+char	*ft_strjoin(char const *s1, char const *s2);
 
 // Huffman's algorithm
 t_leaf	**get_symbols(int fd);
