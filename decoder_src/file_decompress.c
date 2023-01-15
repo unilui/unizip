@@ -6,13 +6,14 @@
 /*   By: lufelip2 <lufelip2@student.42sp.org.br     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/15 05:24:08 by lufelip2          #+#    #+#             */
-/*   Updated: 2023/01/15 07:47:00 by lufelip2         ###   ########.fr       */
+/*   Updated: 2023/01/15 18:42:22 by lufelip2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "unizip.h"
+#include "shared_memory.h"
 
-int	bit_read(int fd_in, t_dpd_byte *dpd_byte)
+int	bit_read(char *file, t_dpd_byte *dpd_byte)
 {
 	int	bit;
 
@@ -22,39 +23,43 @@ int	bit_read(int fd_in, t_dpd_byte *dpd_byte)
 	dpd_byte->counter++;
 	if (dpd_byte->counter == 8)
 	{
-		read(fd_in, &dpd_byte->byte, 1);
+		dpd_byte->byte = file[dpd_byte->byte_counter];
 		dpd_byte->counter = 0;
+		dpd_byte->byte_counter++;
 	}
 	return (bit);
 }
 
-void	decompress(int fd_out, t_leaf *tree, int fd_in, t_dpd_byte *dpd_byte)
+void	decompress(char *out_file, t_leaf *tree, char *file, t_dpd_byte *dpd_byte)
 {
 	if (tree->is_leaf)
 	{
-		write(fd_out, tree->symbol, 1);
+		out_file[dpd_byte->out_counter] = tree->symbol[0];
+		dpd_byte->out_counter++;
 		return ;
 	}
 	dpd_byte->bit_counter++;
-	if (!bit_read(fd_in, dpd_byte))
+	if (!bit_read(file, dpd_byte))
 	{
-		decompress(fd_out, tree->left, fd_in, dpd_byte);
+		decompress(out_file, tree->left, file, dpd_byte);
 		return ;
 	}
 	else
 	{
-		decompress(fd_out, tree->right, fd_in, dpd_byte);
+		decompress(out_file, tree->right, file, dpd_byte);
 		return ;
 	}
 }
 
-void	file_decompress(t_leaf *tree, int fd_in, int fd_out)
+void	file_decompress(t_data *data)
 {
 	t_dpd_byte		dpd_byte;
 
 	dpd_byte.counter = 0;
 	dpd_byte.bit_counter = 0;
-	read(fd_in, &dpd_byte.byte, 1);
-	while (dpd_byte.bit_counter < 51)
-		decompress(fd_out, tree, fd_in, &dpd_byte);
+	dpd_byte.byte_counter = 1;
+	dpd_byte.byte = data->file[0];
+	dpd_byte.out_counter = 0;
+	while (dpd_byte.bit_counter < data->meta[FILE_BIT_SIZE])
+		decompress(data->out_file, data->tree, data->file, &dpd_byte);
 }

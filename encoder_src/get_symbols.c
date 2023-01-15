@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_symbols.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lufelip2 <lufelip2@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: lufelip2 <lufelip2@student.42sp.org.br     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/10 19:55:52 by lufelip2          #+#    #+#             */
-/*   Updated: 2023/01/13 00:02:34 by lufelip2         ###   ########.fr       */
+/*   Updated: 2023/01/15 16:13:49 by lufelip2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,5 +71,6 @@ t_leaf	**get_symbols(int fd)
 	symbol_table = NULL;
 	while (read(fd, &symbol, 1))
 		symbol_register(&symbol_table, symbol);
+	lseek(fd, 0, SEEK_SET);
 	return (symbol_table);
 }

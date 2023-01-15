@@ -6,7 +6,7 @@ DECODER_OBJS	=	${DECODER_SRCS:%.c=$(OBJS_DIR)%.o}
 DECODER_NAME	=	decoder
 OBJS_DIR		=	objects/
 CC				=	cc
-CFLAGS			=	-Wall -Wextra -Werror
+CFLAGS			=	-g -Wall -Wextra -Werror
 RM				=	rm -rf
 
 $(OBJS_DIR)%.o:	%.c

@@ -1,19 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_hufftree.c                                     :+:      :+:    :+:   */
+/*   rebuild_hufftree.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lufelip2 <lufelip2@student.42sp.org.br     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/01/10 20:36:05 by lufelip2          #+#    #+#             */
-/*   Updated: 2023/01/15 17:12:27 by lufelip2         ###   ########.fr       */
+/*   Created: 2023/01/15 17:44:30 by lufelip2          #+#    #+#             */
+/*   Updated: 2023/01/15 17:48:22 by lufelip2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "unizip.h"
 #include "shared_memory.h"
 
-void	swap_nodes(t_leaf **node_a, t_leaf **node_b)
+static void	swap_nodes(t_leaf **node_a, t_leaf **node_b)
 {
 	t_leaf	*hold;
 
@@ -22,7 +22,7 @@ void	swap_nodes(t_leaf **node_a, t_leaf **node_b)
 	*node_b = hold;
 }
 
-void	sort_table(t_leaf ***symbols)
+static void	sort_table(t_leaf ***symbols)
 {
 	int		i;
 	int		size;
@@ -89,7 +89,7 @@ static t_leaf	*new_node(t_leaf *left, t_leaf *right)
 	return (node);
 }
 
-t_leaf	*hufftree(t_leaf **symbols)
+static t_leaf	*hufftree(t_leaf **symbols)
 {
 	t_leaf	**tmp_symbol;
 	t_leaf	**tmp;
@@ -109,34 +109,11 @@ t_leaf	*hufftree(t_leaf **symbols)
 	return (node);
 }
 
-void	save_table(t_leaf **symbols, t_data *data)
-{
-	int	i;
-
-	i = 0;
-	data->symbol_table = attach_memory_block(
-		UNIZIP_DB, data->meta[TABLE_SIZE], SYMBOL_BLK
-	);
-	data->frq_table = (int *)attach_memory_block(
-		UNIZIP_DB, data->meta[TABLE_SIZE], FRQ_BLK
-	);
-	while (symbols[i])
-	{
-		data->symbol_table[i] = symbols[i]->symbol[0];
-		data->frq_table[i] = symbols[i]->weight;
-		i++;
-	}
-}
-
-void	get_hufftree(t_data *data)
+void	rebuild_hufftree(t_data *data)
 {
 	t_leaf	**symbols;
 
 	symbols = NULL;
-	symbols = get_symbols(data->fd);
-	data->meta[TABLE_SIZE] = table_size(symbols);
-	save_table(symbols, data);
+	symbols = rebuild_symbols(data);
 	data->tree = hufftree(symbols);
-	data->meta[FILE_BIT_SIZE] = file_bit_size(data);
-	data->meta[FILE_SIZE] = file_size(data);
 }

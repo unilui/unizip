@@ -6,7 +6,7 @@
 /*   By: lufelip2 <lufelip2@student.42sp.org.br     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/10 19:56:38 by lufelip2          #+#    #+#             */
-/*   Updated: 2023/01/15 13:08:10 by lufelip2         ###   ########.fr       */
+/*   Updated: 2023/01/15 19:19:47 by lufelip2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,34 +36,50 @@ typedef	struct s_leaf {
 typedef struct s_cpd_byte {
 	unsigned char	byte;
 	short int		counter;
+	int				byte_counter;
 } t_cpd_byte;
 
 typedef struct s_dpd_byte {
 	unsigned char	byte;
 	short int		counter;
 	int				bit_counter;
+	int				byte_counter;
+	int				out_counter;
 } t_dpd_byte;
 
-typedef union u_meta {
-	int	*table_size;
-	char *data;
-} t_meta;
+typedef struct s_data {
+	int	*meta;
+	int	fd;
+	t_leaf	*tree;
+	char	*symbol_table;
+	int		*frq_table;
+	char	*file;
+	char	*out_file;
+	int		*decoder_status;
+} t_data;
 
 // Utils
 int		table_size(t_leaf **table);
 void	free_table(t_leaf **table);
 char	*ft_strjoin(char const *s1, char const *s2);
 char	*ft_strchr(const char *s, int c);
+void    free_tree(t_leaf *tree);
 
 // Huffman's algorithm
 t_leaf	**get_symbols(int fd);
-t_leaf	*get_hufftree(t_leaf **symbols);
+void	get_hufftree(t_data *data);
+t_leaf	**rebuild_symbols(t_data *data);
+void	rebuild_hufftree(t_data *data);
 
 // Compresser
-void	file_compress(t_leaf *tree, int fd_in, int fd_out);
-void	file_decompress(t_leaf *tree, int fd_in, int fd_out);
+void	file_compress(t_data *data);
+void	file_decompress(t_data *data);
 
-char	*attach_memory_block(char *filename, int size);
-int	detach_memory_block(char *block);
+int	destroy_memory_block(char *filename, int block);
+char	*attach_memory_block(char *filename, int size, int block);
+int		detach_memory_block(char *block);
 
+int	file_byte_size(t_data *data);
+int	file_bit_size(t_data *data);
+int	file_size(t_data *data);
 #endif
