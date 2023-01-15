@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   unizip.c                                           :+:      :+:    :+:   */
+/*   decoder.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lufelip2 <lufelip2@student.42sp.org.br     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/09 21:32:26 by lufelip2          #+#    #+#             */
-/*   Updated: 2023/01/15 10:21:04 by lufelip2         ###   ########.fr       */
+/*   Updated: 2023/01/15 13:53:13 by lufelip2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ int	main(void)
 	int		fd;
 	int		fd_out;
 	int		new_fd;
-	int		teste_fd;
+	//int		teste_fd;
 	//int		i;
 
 	//i = 0;
@@ -80,12 +80,22 @@ int	main(void)
 	fd_out = open("test.unizip", O_WRONLY | O_CREAT | O_TRUNC, S_IRWXU);
 	file_compress(tree, fd, fd_out);
 	close(fd_out);
-	teste_fd = open("test.unizip", O_RDONLY);
-	new_fd = open("test_decom.txt", O_WRONLY | O_CREAT | O_TRUNC, S_IRWXU);
-	file_decompress(tree, teste_fd, new_fd);
+	//teste_fd = open("test.unizip", O_RDONLY);
+	//new_fd = open("test_decom.txt", O_WRONLY | O_CREAT | O_TRUNC, S_IRWXU);
+	//file_decompress(tree, teste_fd, new_fd);
 	close(fd);
-	close(new_fd);
+	//close(new_fd);
 	free_tree(tree);
+	//int mem = open("/tmp/teste", O_WRONLY | O_CREAT, S_IRWXU);
+	//close(mem);
+	new_fd = open(UNIZIP_DB, O_WRONLY | O_CREAT, S_IRWXU);
+	int *teste = (int *)attach_memory_block(UNIZIP_DB, 4);
+	//t_meta meta;
+	//meta.data = teste;
+	//meta.table_size[0] = 15;
+	//memmove(teste, meta.data, 4);
+	teste[0] = 17;
+	detach_memory_block((char *)teste);
 	//while(symbols[i])
 	//{
 	//	printf("%d: %d -> %d\n", i, symbols[i]->symbol, symbols[i]->weight);

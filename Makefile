@@ -1,31 +1,33 @@
-SRCS		= unizip.c get_symbols.c get_hufftree.c file_compress.c utils.c \
-				file_decompress.c
-
-OBJS		= ${SRCS:%.c=$(OBJS_DIR)%.o}
-OBJS_DIR	= objects/
-NAME		= encoder
-CC			= cc
-CFLAGS		= -Wall -Werror -Wextra
-RM			= rm -rf
+ENCODER_SRCS	=	encoder_src/* memory/*
+ENCODER_OBJS	=	${ENCODER_SRCS:%.c=$(OBJS_DIR)%.o}
+ENCODER_NAME	=	encoder
+DECODER_SRCS	=	decoder_src/* memory/*
+DECODER_OBJS	=	${DECODER_SRCS:%.c=$(OBJS_DIR)%.o}
+DECODER_NAME	=	decoder
+OBJS_DIR		=	objects/
+CC				=	cc
+CFLAGS			=	-Wall -Wextra -Werror
+RM				=	rm -rf
 
 $(OBJS_DIR)%.o:	%.c
 			@mkdir -p $(dir $@)
-			@$(CC) $(CFLAGS) -g -c $< -o $@
+			@$(CC) $(CFLAGS) -c $< -o $@
 
-all:		$(NAME)
+all:		$(ENCODER_NAME) $(DECODER_NAME)
 
-$(NAME):	$(OBJS)
-			@${CC} $(CFLAGS) $(OBJS) -g -o $(NAME)
+$(DECODER_NAME):	$(DECODER_OBJS)
+			@$(CC) $(DECODER_OBJS) -o $(DECODER_NAME) -I includes
+
+$(ENCODER_NAME):	$(ENCODER_OBJS)
+			@$(CC) $(ENCODER_OBJS) -o $(ENCODER_NAME) -I includes
 
 clean:
 			@$(RM) $(OBJS_DIR)
 
 fclean:		clean
-			@$(RM) $(NAME)
+			@$(RM) $(ENCODER_NAME)
+			@$(RM) $(DECODER_NAME)
 
 re:			fclean all
 
-test:		re
-			@./$(NAME)
-
-.PHONY:		all clean fclean re
+.PHONY:		all clean fclean re run

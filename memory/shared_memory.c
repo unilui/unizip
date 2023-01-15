@@ -6,9 +6,11 @@
 /*   By: lufelip2 <lufelip2@student.42sp.org.br     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/15 09:14:22 by lufelip2          #+#    #+#             */
-/*   Updated: 2023/01/15 09:35:47 by lufelip2         ###   ########.fr       */
+/*   Updated: 2023/01/15 12:22:43 by lufelip2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include "unizip.h"
 
 int	get_shared_block(char *filename, int size)
 {
@@ -17,7 +19,7 @@ int	get_shared_block(char *filename, int size)
 	key = ftok(filename, 0);
 	if (key == -1)
 		return(-1);
-	return (shmget(key, size, 0644 | IPC_CREATE));
+	return (shmget(key, size, 0644 | IPC_CREAT));
 }
 
 char	*attach_memory_block(char *filename, int size)
@@ -34,17 +36,17 @@ char	*attach_memory_block(char *filename, int size)
 	return (result);
 }
 
-bool	detach_memory_block(char *block)
+int	detach_memory_block(char *block)
 {
 	return (shmdt(block) != -1);
 }
 
-bool	destroy_memory_block(char *filename)
+int	destroy_memory_block(char *filename)
 {
 	int shared_block_id;
 
 	shared_block_id = get_shared_block(filename, 0);
 	if (shared_block_id == -1)
-		return (NULL);
+		return (0);
 	return (shmctl(shared_block_id, IPC_RMID, NULL) != -1);
 }
