@@ -1,4 +1,5 @@
-SRCS		= unizip.c get_symbols.c get_hufftree.c utils.c
+SRCS		= unizip.c get_symbols.c get_hufftree.c file_compress.c utils.c \
+				file_decompress.c
 
 OBJS		= ${SRCS:%.c=$(OBJS_DIR)%.o}
 OBJS_DIR	= objects/

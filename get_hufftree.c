@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_hufftree.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lufelip2 <lufelip2@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: lufelip2 <lufelip2@student.42sp.org.br     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/10 20:36:05 by lufelip2          #+#    #+#             */
-/*   Updated: 2023/01/13 00:05:49 by lufelip2         ###   ########.fr       */
+/*   Updated: 2023/01/15 10:19:15 by lufelip2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,5 +103,7 @@ t_leaf	*get_hufftree(t_leaf **symbols)
 		tmp_symbol = node_add(tmp_symbol, node);
 		free(tmp);
 	}
-	return (tmp_symbol[0]);
+	node = tmp_symbol[0];
+	free(tmp_symbol);
+	return (node);
 }
